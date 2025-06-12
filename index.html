@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Mockup with Voice Extractor</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* General styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e0e0e0; /* Light gray background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px; /* Padding around the mock-up */
+            box-sizing: border-box;
+            overflow: hidden; /* Prevent body scroll when modal is open */
+        }
+
+        /* Main container for the WhatsApp mock-up */
+        .whatsapp-container {
+            width: 100%;
+            max-width: 400px; /* Max width to simulate a phone screen */
+            height: 90vh; /* Responsive height */
+            max-height: 700px; /* Max height for desktop view */
+            background-color: #f0f0f0; /* Lighter background for the app */
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Hide overflow content */
+            position: relative; /* For absolute positioning of screens and modal */
+        }
+
+        /* Common screen styling */
+        .screen {
+            position: absolute; /* Position screens on top of each other */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background-color: #f0f0f0;
+            transition: transform 0.3s ease-in-out; /* Smooth transition for screen changes */
+            transform: translateX(100%); /* Start off-screen to the right */
+        }
+
+        /* Initially active screen */
+        .screen.active {
+            transform: translateX(0); /* Slide into view */
+        }
+
+        /* Sign-up Screen Specific Styling */
+        #signup-screen {
+            padding: 20px;
+            justify-content: flex-start;
+            gap: 15px;
+        }
+
+        #signup-screen .back-button {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: #075e54;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        #signup-screen h2 {
+            color: #075e54;
+            font-size: 1.8rem;
+            margin-top: 50px; /* Space for back button */
+            margin-bottom: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        #signup-screen input[type="text"],
+        #signup-screen input[type="password"] {
+            width: calc(100% - 40px); /* Account for padding */
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        #signup-screen input:focus {
+            border-color: #128c7e;
+            box-shadow: 0 0 0 2px rgba(18, 140, 126, 0.2);
+        }
+
+        #signup-screen button.primary {
+            background-color: #075e54;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+            width: calc(100% - 40px);
+            margin-top: 10px;
+        }
+
+        #signup-screen button.primary:hover {
+            background-color: #128c7e;
+        }
+
+
+        /* Chat Screen Specific Styling */
+        #chat-screen {
+            background-color: #f0f0f0; /* Lighter background for the app */
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Hide overflow content */
+            transform: translateX(0); /* This is the initial active screen */
+        }
+        /* No transform: translateX(100%) for chat-screen as it's the default view */
+
+        .header {
+            background-color: #075e54; /* WhatsApp green */
+            color: white;
+            padding: 15px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        .header .left, .header .right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%; /* Makes the image circular */
+            object-fit: cover; /* Ensures the image covers the area without distortion */
+            background-color: #dcf8c6; /* Placeholder for avatar background */
+            display: block; /* Ensure it behaves like a block element for sizing */
+        }
+
+        .header .name {
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .header .icons {
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .chat-area {
+            flex-grow: 1; /* Takes available space */
+            padding: 10px;
+            overflow-y: auto; /* Scrollable chat */
+            background-color: #ece5dd; /* Chat background color */
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Space between messages */
+        }
+
+        .message-bubble {
+            max-width: 80%; /* Max width for message bubbles */
+            padding: 8px 12px;
+            border-radius: 10px;
+            word-wrap: break-word; /* Wrap long words */
+            box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+            font-size: 0.95rem;
+            line-height: 1.3;
+        }
+
+        .message-bubble.sent {
+            align-self: flex-end; /* Align sent messages to the right */
+            background-color: #dcf8c6; /* Light green for sent messages */
+            border-bottom-right-radius: 2px; /* Pointy corner */
+        }
+
+        .message-bubble.received {
+            align-self: flex-start; /* Align received messages to the left */
+            background-color: #ffffff; /* White for received messages */
+            border-bottom-left-radius: 2px; /* Pointy corner */
+        }
+
+        .input-area {
+            padding: 10px;
+            background-color: #f0f0f0; /* Lighter background for input area */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+        .input-area input[type="text"] {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 25px;
+            background-color: #ffffff;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.08);
+        }
+
+        .input-area button {
+            background-color: #075e54; /* WhatsApp green */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        .input-area button:hover {
+            background-color: #128c7e; /* Slightly darker green on hover */
+        }
+
+        /* Scrollbar styling (for Webkit browsers) */
+        .chat-area::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-area::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .chat-area::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .chat-area::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* --- Modal/Popup Styling for Voice Extractor --- */
+        .modal-overlay {
+            position: absolute; /* Relative to whatsapp-container */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Ensure it's on top */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            width: 90%; /* Adjust width for mobile-like popup */
+            max-width: 350px; /* Max width for larger screens */
+            max-height: 85%; /* Ensure it fits on smaller screens */
+            overflow-y: auto; /* Allow scrolling if content is too long */
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            position: relative;
+        }
+
+        .modal-close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+        }
+
+        .modal-close-button:hover {
+            background-color: #eee;
+        }
+
+        /* Voice Extractor specific styles within modal */
+        .voice-extractor-container {
+            padding: 10px; /* Smaller padding inside the modal */
+        }
+
+        .voice-extractor-container h1 {
+            font-size: 1.5rem; /* Smaller heading for popup */
+            font-weight: 600;
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .voice-extractor-container p {
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .voice-extractor-container .controls {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            justify-content: center;
+            gap: 10px; /* Space between buttons */
+            margin-bottom: 15px;
+        }
+
+        .voice-extractor-container button {
+            padding: 8px 15px; /* Smaller padding for buttons */
+            font-size: 0.9rem;
+            border-radius: 20px; /* More rounded buttons */
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            white-space: nowrap; /* Prevent button text from wrapping */
+        }
+
+        .voice-extractor-container .bg-blue-600 { background-color: #2563eb; color: white; }
+        .voice-extractor-container .hover\:bg-blue-700:hover { background-color: #1d4ed8; }
+        .voice-extractor-container .bg-green-600 { background-color: #16a34a; color: white; }
+        .voice-extractor-container .hover\:bg-green-700:hover { background-color: #15803d; }
+        .voice-extractor-container .bg-red-600 { background-color: #dc2626; color: white; }
+        .voice-extractor-container .hover\:bg-red-700:hover { background-color: #b91c1c; }
+        .voice-extractor-container .bg-gray-500 { background-color: #6b7280; color: white; }
+        .voice-extractor-container .hover\:bg-gray-600:hover { background-color: #4b5563; }
+
+        .voice-extractor-container .pulsate {
+            animation: pulsate 1.5s infinite;
+        }
+        @keyframes pulsate {
+            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); } /* Use red for pulsate */
+            70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+        }
+
+        .voice-extractor-container .status-box {
+            padding: 10px;
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            min-height: 80px; /* Smaller min-height */
+            margin-bottom: 15px;
+            font-size: 0.85rem; /* Smaller text */
+        }
+
+        .voice-extractor-container .status-box p {
+            font-size: 0.9rem; /* Slightly larger for status text */
+            margin-bottom: 5px;
+        }
+
+        .voice-extractor-container .form-group {
+            margin-bottom: 10px; /* Smaller gap between form groups */
+        }
+
+        .voice-extractor-container label {
+            font-size: 0.8rem; /* Smaller label font size */
+            color: #4a5568;
+            margin-bottom: 3px;
+        }
+
+        .voice-extractor-container input,
+        .voice-extractor-container select,
+        .voice-extractor-container textarea {
+            width: 100%;
+            padding: 8px 10px; /* Smaller padding for inputs */
+            font-size: 0.9rem; /* Smaller input font size */
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            box-sizing: border-box; /* Ensure padding doesn't add to width */
+            transition: all 0.2s ease;
+        }
+
+        .voice-extractor-container input:focus,
+        .voice-extractor-container select:focus,
+        .voice-extractor-container textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .voice-extractor-container .text-center { text-align: center; }
+        .voice-extractor-container .text-gray-800 { color: #1f2937; }
+        .voice-extractor-container .text-gray-500 { color: #6b7280; }
+        .voice-extractor-container .font-semibold { font-weight: 600; }
+        .voice-extractor-container .font-medium { font-weight: 500; }
+        .voice-extractor-container .mt-1 { margin-top: 0.25rem; }
+        .voice-extractor-container .mt-2 { margin-top: 0.5rem; }
+        .voice-extractor-container .mb-1 { margin-bottom: 0.25rem; }
+        .voice-extractor-container .mb-2 { margin-bottom: 0.5rem; }
+        .voice-extractor-container .p-4 { padding: 1rem; }
+        .voice-extractor-container .bg-yellow-100 { background-color: #fef3c7; }
+        .voice-extractor-container .border-yellow-300 { border-color: #fcd34d; }
+        .voice-extractor-container .text-yellow-800 { color: #92400e; }
+        .voice-extractor-container .text-yellow-700 { color: #a16207; }
+        .voice-extractor-container .rounded-lg { border-radius: 0.5rem; }
+        .voice-extractor-container .grid { display: grid; }
+        .voice-extractor-container .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .voice-extractor-container .gap-6 { gap: 1.5rem; } /* Adjusted from original to be less drastic */
+        .voice-extractor-container .gap-y-4 { row-gap: 1rem; } /* Added for vertical spacing */
+
+
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            .voice-extractor-container .md\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .voice-extractor-container .md\:col-span-2 {
+                grid-column: span 2 / span 2;
+            }
+            .modal-content {
+                padding: 20px;
+            }
+            .voice-extractor-container h1 {
+                font-size: 1.8rem;
+            }
+            .voice-extractor-container button {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+            .voice-extractor-container .status-box {
+                min-height: 100px;
+            }
+            .voice-extractor-container label {
+                font-size: 0.875rem;
+            }
+            .voice-extractor-container input,
+            .voice-extractor-container select,
+            .voice-extractor-container textarea {
+                padding: 10px 15px;
+                font-size: 1rem;
+            }
+        }
+
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+            .whatsapp-container {
+                border-radius: 0; /* Full screen on small devices */
+                height: 100vh;
+                max-height: unset;
+                box-shadow: none;
+            }
+            .header {
+                border-radius: 0;
+            }
+            .input-area {
+                border-radius: 0;
+            }
+            .screen {
+                border-radius: 0; /* Ensures full screen on mobile */
+            }
+            .modal-overlay {
+                /* On small screens, make the modal nearly full screen */
+                align-items: flex-end; /* Push content to bottom for typical mobile modal */
+                background-color: rgba(0, 0, 0, 0.4); /* Less opaque overlay */
+            }
+            .modal-content {
+                width: 100%; /* Full width */
+                max-width: unset;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+                padding-bottom: 20px; /* Add some space at the bottom */
+            }
+            .modal-close-button {
+                top: 5px;
+                right: 5px;
+                font-size: 1.3rem;
+            }
+             .voice-extractor-container h1 {
+                font-size: 1.2rem;
+            }
+            .voice-extractor-container button {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            .voice-extractor-container label {
+                font-size: 0.75rem;
+            }
+            .voice-extractor-container input,
+            .voice-extractor-container select,
+            .voice-extractor-container textarea {
+                padding: 6px 8px;
+                font-size: 0.85rem;
+            }
+            .voice-extractor-container .controls {
+                gap: 5px; /* Smaller gap between buttons */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="whatsapp-container">
+        <div id="signup-screen" class="screen">
+            <i class="fas fa-arrow-left back-button" id="signupBackBtn"></i>
+            <h2>Create Your Account</h2>
+            <input type="text" id="usernameInput" placeholder="Enter username">
+            <input type="password" id="passwordInput" placeholder="Enter password">
+            <button class="primary" id="registerBtn">Register</button>
+        </div>
+
+        <div id="chat-screen" class="screen active">
+            <div class="header">
+                <div class="left">
+                    <i class="fas fa-arrow-left icons" id="chatBackBtn"></i>
+                    <div class="contact-info">
+                        <img src="logo mukuru 2.png" alt="Mukuru Logo" class="avatar">
+                        <span class="name">Mukuru</span>
+                    </div>
+                </div>
+                <div class="right">
+                    <i class="fas fa-video icons"></i>
+                    <i class="fas fa-phone-alt icons"></i>
+                    <i class="fas fa-ellipsis-v icons"></i>
+                </div>
+            </div>
+
+            <div class="chat-area" id="chatArea">
+                </div>
+
+            <div class="input-area">
+                <input type="text" id="messageInput" placeholder="Type a message or speak your command...">
+                <button id="sendButton"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+        <div id="voiceExtractorModal" class="modal-overlay">
+            <div class="modal-content">
+                <button class="modal-close-button" id="closeVoiceExtractorModal">&times;</button>
+                <div class="voice-extractor-container">
+                    <div class="text-center mb-6">
+                        <h1>Voice Information Extractor</h1>
+                        <p>Press record and state your details, or upload a file.</p>
+                    </div>
+
+                    <div class="controls">
+                        <button id="recordToggleButton" class="bg-blue-600">
+                            Start Recording
+                        </button>
+                        <button id="uploadButton" class="bg-green-600">
+                            Upload Recording
+                        </button>
+                        <input type="file" id="audioUpload" class="hidden" accept="audio/wav, audio/mpeg, .wav, .mp3">
+                        <button id="clearButton" class="bg-gray-500">
+                            Clear
+                        </button>
+                    </div>
+
+                    <div class="status-box">
+                        <p id="status" class="text-center font-medium mb-2">Status: Ready</p>
+                        <div id="transcription" class="text-gray-800 text-sm"></div>
+                    </div>
+
+                    <form id="infoForm" class="grid grid-cols-1 md:grid-cols-2 gap-y-4">
+                        <div class="form-group">
+                            <label for="name" class="block text-sm font-medium">Name</label>
+                            <input type="text" id="name" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="surname" class="block text-sm font-medium">Surname</label>
+                            <input type="text" id="surname" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender" class="block text-sm font-medium">Gender</label>
+                            <input type="text" id="gender" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="dob" class="block text-sm font-medium">Date of Birth (YYYY/MM/DD)</label>
+                            <input type="text" id="dob" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="docType" class="block text-sm font-medium">Document Type</label>
+                            <select id="docType" class="form-select">
+                                <option value="">-- Select --</option>
+                                <option value="South African ID">South African ID</option>
+                                <option value="Passport">Passport</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="idNumber" class="block text-sm font-medium">ID / Passport Number</label>
+                            <input type="text" id="idNumber" class="form-input">
+                        </div>
+                        <div class="form-group md:col-span-2">
+                            <label for="address" class="block text-sm font-medium">Address</label>
+                            <textarea id="address" rows="2" class="form-input"></textarea>
+                        </div>
+                        <div class="form-group md:col-span-2">
+                            <label for="country" class="block text-sm font-medium">Country</label>
+                            <input type="text" id="country" class="form-input">
+                        </div>
+                    </form>
+                </div>
+                <button id="saveAndConfirmBtn" class="primary" style="margin-top: 20px; width: 90%; align-self: center;">
+                    Go back to WA / Save & Confirm
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Screen Management ---
+        const signupScreen = document.getElementById('signup-screen');
+        const chatScreen = document.getElementById('chat-screen');
+        const signupBackBtn = document.getElementById('signupBackBtn');
+        const chatBackBtn = document.getElementById('chatBackBtn');
+        const registerBtn = document.getElementById('registerBtn');
+
+        // Voice Extractor Modal elements
+        const voiceExtractorModal = document.getElementById('voiceExtractorModal');
+        const closeVoiceExtractorModalBtn = document.getElementById('closeVoiceExtractorModal');
+        const saveAndConfirmBtn = document.getElementById('saveAndConfirmBtn');
+
+        // Function to show a specific screen
+        function showScreen(screenToShow) {
+            // Hide all screens
+            signupScreen.classList.remove('active');
+            chatScreen.classList.remove('active');
+
+            // Show the desired screen
+            screenToShow.classList.add('active');
+
+            // Scroll to bottom of chat area if navigating to it
+            if (screenToShow === chatScreen) {
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+        }
+
+        // --- Chat Functionality ---
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const chatArea = document.getElementById('chatArea');
+
+        // Enum for chat states
+        const CHAT_STATE = {
+            INITIAL: 'initial',
+            MAIN_MENU: 'main_menu',
+            SIGNUP_OPTIONS: 'signup_options',
+            VOICE_SIGNUP_ACTIVE: 'voice_signup_active',
+            CONFIRM_VOICE_DATA: 'confirm_voice_data',
+            CHATTING: 'chatting'
+        };
+        let currentChatContext = CHAT_STATE.INITIAL;
+
+        // Variable to temporarily store extracted data for confirmation
+        let extractedVoiceData = {};
+
+        // --- Text-to-Speech (TTS) Function ---
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-ZA'; // Set language for South African English pronunciation
+                // You can get available voices and set a specific one if needed:
+                // window.speechSynthesis.onvoiceschanged = () => {
+                //     let voices = window.speechSynthesis.getVoices();
+                //     utterance.voice = voices.find(voice => voice.lang === 'en-US' && voice.name === 'Google US English');
+                // };
+                window.speechSynthesis.speak(utterance);
+            } else {
+                console.warn("Speech Synthesis not supported in this browser. Bot messages will only be displayed as text.");
+            }
+        }
+
+        /**
+         * Adds a message bubble to the chat area.
+         * @param {string} text - The text content of the message.
+         * @param {string} type - 'sent' for user's message, 'received' for bot's message.
+         */
+        function addMessage(text, type) {
+            const messageBubble = document.createElement('div');
+            messageBubble.classList.add('message-bubble', type);
+            // Use innerHTML to allow line breaks from \n
+            messageBubble.innerHTML = text.replace(/\n/g, '<br>');
+            chatArea.appendChild(messageBubble);
+            chatArea.scrollTop = chatArea.scrollHeight; // Scroll to bottom
+
+            if (type === 'received') { // Only speak bot messages
+                speak(text);
+            }
+        }
+
+        /**
+         * Displays the initial welcome message.
+         */
+        function displayInitialWelcome() {
+            chatArea.innerHTML = ''; // Clear chat to start fresh when displaying welcome
+            addMessage("Hello! Welcome to Mukuru. Please say 'hi' to begin!", 'received');
+            currentChatContext = CHAT_STATE.INITIAL;
+        }
+
+        /**
+         * Displays the main menu options in a single message bubble.
+         */
+        function displayMainMenu() {
+            const menuText = "How can we help you?\n\n" +
+                               "Are you already a Mukuru customer? Say 'two' to change your number.\n" +
+                               "Are you new to Mukuru? Say 'one' to sign up!\n\n" +
+                               "Alternatively, you can say 'Check rates', 'Call me', or 'Change language'.";
+            addMessage(menuText, 'received');
+            currentChatContext = CHAT_STATE.MAIN_MENU;
+        }
+
+        /**
+         * Displays the sign-up options menu.
+         */
+        function displaySignupOptions() {
+            const signupMenuText = "How would you like to sign up?\n" +
+                                   "Say 'one' for Manual Sign Up or 'two' for Sign Up with Voice.";
+            addMessage(signupMenuText, 'received');
+            currentChatContext = CHAT_STATE.SIGNUP_OPTIONS;
+        }
+
+        /**
+         * Displays the confirmation dialog with extracted voice data.
+         * @param {Object} data - The extracted data object.
+         */
+        function displayVoiceDataConfirmation(data) {
+            let confirmationText = "I have extracted the following details:\n\n";
+            confirmationText += `Name: ${data.name || 'N/A'}\n`;
+            confirmationText += `Surname: ${data.surname || 'N/A'}\n`;
+            confirmationText += `Gender: ${data.gender || 'N/A'}\n`;
+            confirmationText += `Date of Birth: ${data.dob || 'N/A'}\n`;
+            confirmationText += `Document Type: ${data.docType || 'N/A'}\n`;
+            confirmationText += `ID/Passport No.: ${data.idNumber || 'N/A'}\n`;
+            confirmationText += `Address: ${data.address || 'N/A'}\n`;
+            confirmationText += `Country: ${data.country || 'N/A'}\n\n`;
+            confirmationText += "Is this information correct? Please say 'Yes' to confirm or 'No' to re-record.";
+
+            addMessage(confirmationText, 'received');
+            currentChatContext = CHAT_STATE.CONFIRM_VOICE_DATA;
+        }
+
+        /**
+         * Handles processing of spoken commands, mapping them to actions.
+         * This function simulates typing the command into the input field and sending it.
+         * @param {string} commandText - The transcribed voice command.
+         */
+        function processSpokenCommand(commandText) {
+            const lowerCaseCommand = commandText.toLowerCase().trim();
+
+            if (lowerCaseCommand.includes('hi') || lowerCaseCommand.includes('hello')) {
+                messageInput.value = 'hi';
+                sendMessage();
+            } else if (lowerCaseCommand.includes('one') || lowerCaseCommand.includes('sign up')) {
+                messageInput.value = '1';
+                sendMessage();
+            } else if (lowerCaseCommand.includes('two') || lowerCaseCommand.includes('change number')) {
+                messageInput.value = '2';
+                sendMessage();
+            } else if (lowerCaseCommand.includes('three') || lowerCaseCommand.includes('check rates')) {
+                messageInput.value = '3';
+                sendMessage();
+            } else if (lowerCaseCommand.includes('four') || lowerCaseCommand.includes('call me')) {
+                messageInput.value = '4';
+                sendMessage();
+            } else if (lowerCaseCommand.includes('five') || lowerCaseCommand.includes('change language')) {
+                messageInput.value = '5';
+                sendMessage();
+            } else if (lowerCaseCommand.includes('yes') && currentChatContext === CHAT_STATE.CONFIRM_VOICE_DATA) {
+                messageInput.value = 'yes';
+                sendMessage();
+            } else if (lowerCaseCommand.includes('no') && currentChatContext === CHAT_STATE.CONFIRM_VOICE_DATA) {
+                messageInput.value = 'no';
+                sendMessage();
+            } else if (lowerCaseCommand.includes('cancel voice') && currentChatContext === CHAT_STATE.VOICE_SIGNUP_ACTIVE) {
+                messageInput.value = 'cancel voice';
+                sendMessage();
+            } else if (lowerCaseCommand.includes('menu') && currentChatContext !== CHAT_STATE.INITIAL) {
+                 messageInput.value = 'menu';
+                 sendMessage();
+            }
+            // Additions for "sign up manually" and "sign up with voice"
+            else if (currentChatContext === CHAT_STATE.SIGNUP_OPTIONS) {
+                if (lowerCaseCommand.includes('sign up manually')) {
+                    messageInput.value = '1';
+                    sendMessage();
+                } else if (lowerCaseCommand.includes('sign up with voice') || lowerCaseCommand.includes('sign up by voice')) {
+                    messageInput.value = '2';
+                    sendMessage();
+                }
+            }
+            // Add more specific voice commands as needed for other interactions.
+            // For general chatting, the user can just speak, and it will be transcribed.
+            // Example: To activate the voice input modal from chat, if not already active:
+            // else if (lowerCaseCommand.includes('open voice sign up') && currentChatContext === CHAT_STATE.SIGNUP_OPTIONS) {
+            //     messageInput.value = '2'; // Simulate choosing option 2
+            //     sendMessage();
+            // }
+        }
+
+
+        /**
+         * Handles sending messages and managing chat flow.
+         */
+        function sendMessage() {
+            const messageText = messageInput.value.trim();
+            if (!messageText) return; // Don't send empty messages
+
+            addMessage(messageText, 'sent'); // Add user's message to chat
+            messageInput.value = ''; // Clear input
+
+            const lowerCaseMessage = messageText.toLowerCase();
+
+            switch (currentChatContext) {
+                case CHAT_STATE.INITIAL:
+                    if (lowerCaseMessage === 'hi') {
+                        displayMainMenu();
+                    } else {
+                        addMessage("I didn't understand that. Please say 'hi' to begin.", 'received');
+                    }
+                    break;
+
+                case CHAT_STATE.MAIN_MENU:
+                    if (lowerCaseMessage === '1') {
+                        displaySignupOptions();
+                    } else if (lowerCaseMessage === '2') {
+                        addMessage("You selected 'Already a customer - change my number'. Please provide your old and new numbers.", 'received');
+                        currentChatContext = CHAT_STATE.CHATTING; // Transition to general chatting for this interaction
+                    } else if (lowerCaseMessage === '3') {
+                        addMessage("You selected 'Check rates'. Please specify the currency and amount you'd like to check.", 'received');
+                        currentChatContext = CHAT_STATE.CHATTING; // Transition to general chatting for this interaction
+                    } else if (lowerCaseMessage === '4') {
+                        addMessage("You selected 'Call me'. Our support team will call you shortly.", 'received');
+                        currentChatContext = CHAT_STATE.CHATTING; // Transition to general chatting
+                    } else if (lowerCaseMessage === '5') {
+                        addMessage("You selected 'Change language'. Please specify your preferred language.", 'received');
+                        currentChatContext = CHAT_STATE.CHATTING; // Transition to general chatting
+                    } else {
+                        addMessage("Invalid option. Please choose a number from the menu (1, 2, 3, 4, or 5).", 'received');
+                    }
+                    break;
+
+                case CHAT_STATE.SIGNUP_OPTIONS:
+                    if (lowerCaseMessage === '1') {
+                        showScreen(signupScreen); // Transition to the actual signup form
+                        addMessage("Please fill in your details to register.", 'received');
+                        currentChatContext = CHAT_STATE.CHATTING; // Assuming user will complete signup outside chat
+                    } else if (lowerCaseMessage === '2') {
+                        // Show the voice extractor modal
+                        voiceExtractorModal.classList.add('active');
+                        addMessage("Voice sign-up initiated. Please speak into your microphone or upload a file in the popup window.", 'received');
+                        currentChatContext = CHAT_STATE.VOICE_SIGNUP_ACTIVE; // Set new state
+                    } else {
+                        addMessage("Invalid option. Please choose '1' for Manual Sign Up or '2' for Voice Sign Up.", 'received');
+                    }
+                    break;
+
+                case CHAT_STATE.CHATTING:
+                    // Regular chat response, can be expanded later
+                    addMessage("Got it! You can continue chatting or say 'menu' to go back to the main options.", 'received');
+                    if (lowerCaseMessage === 'menu') {
+                        displayMainMenu();
+                    }
+                    break;
+
+                case CHAT_STATE.VOICE_SIGNUP_ACTIVE:
+                    addMessage("The voice sign-up window is still open. Please interact with it directly. Say 'cancel voice' to close it.", 'received');
+                    if (lowerCaseMessage === 'cancel voice') {
+                        voiceExtractorModal.classList.remove('active');
+                        // Clear voice form and transcription upon cancellation
+                        infoForm.reset();
+                        transcriptionEl.innerHTML = '';
+                        statusEl.textContent = "Status: Ready";
+                        if (isRecording) recognition.stop();
+                        setRecordingState(false);
+
+                        addMessage("Voice sign-up cancelled. What else can I help you with?", 'received');
+                        displayMainMenu(); // Go back to main menu or a previous state
+                    }
+                    break;
+
+                case CHAT_STATE.CONFIRM_VOICE_DATA: // NEW CONFIRMATION STATE
+                    if (lowerCaseMessage === 'yes') {
+                        addMessage("Great! Your details have been successfully captured for registration. We'll proceed with your signup now.", 'received');
+                        // Here you would typically send `extractedVoiceData` to your backend for final registration
+                        console.log("Final confirmed data:", extractedVoiceData);
+                        currentChatContext = CHAT_STATE.CHATTING; // Return to general chatting
+                        displayMainMenu(); // Optionally, go back to main menu
+                    } else if (lowerCaseMessage === 'no') {
+                        addMessage("Okay, please re-record your details in the voice capture window. Opening it for you now.", 'received');
+                        voiceExtractorModal.classList.add('active');
+                        // Clear form and transcription to ensure a fresh start for re-record
+                        infoForm.reset();
+                        transcriptionEl.innerHTML = '';
+                        statusEl.textContent = "Status: Ready";
+                        currentChatContext = CHAT_STATE.VOICE_SIGNUP_ACTIVE; // Go back to voice capture state
+                    } else {
+                        addMessage("Please respond with 'Yes' or 'No' to confirm the details.", 'received');
+                    }
+                    break;
+
+                default:
+                    addMessage("An unexpected error occurred. Please refresh or say 'hi' again.", 'received');
+                    displayInitialWelcome();
+                    break;
+            }
+        }
+
+        // Event Listeners for chat functionality (still useful for visual feedback or manual typing)
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // --- Sign-up Logic (Mock) ---
+        const usernameInput = document.getElementById('usernameInput');
+        const passwordInput = document.getElementById('passwordInput');
+
+        registerBtn.addEventListener('click', () => {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            if (username && password) {
+                console.log('User Registered:');
+                console.log('Username:', username);
+                console.log('Password:', password);
+                // In a real app, you'd send this to a server
+                addMessage(`Welcome, ${username}! You are now registered and can chat.`, 'received');
+                showScreen(chatScreen); // Go back to chat after successful (mock) registration
+                usernameInput.value = '';
+                passwordInput.value = '';
+                currentChatContext = CHAT_STATE.CHATTING; // Set chat state to normal chatting
+                displayMainMenu(); // Show main menu after registration
+            } else {
+                // Instead of alert, display message in chat (or a temporary overlay)
+                addMessage("Please enter both username and password.", 'received');
+            }
+        });
+
+        // --- Back Button Logic ---
+        signupBackBtn.addEventListener('click', () => {
+            showScreen(chatScreen); // Return to chat screen
+            displaySignupOptions(); // Show the signup options again
+            speak("You are back to the sign up options. Say 'one' for manual, or 'two' for voice.");
+        });
+
+        chatBackBtn.addEventListener('click', () => {
+            displayInitialWelcome(); // This will also speak the welcome message
+            // speak("You are back to the main welcome screen."); // Avoid double speaking if displayInitialWelcome already speaks
+        });
+
+        // --- Voice Information Extractor Logic (Integrated into WhatsApp Mockup) ---
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition;
+        let isRecording = false;
+
+        // Elements from the voice extractor popup
+        const recordToggleButton = voiceExtractorModal.querySelector('#recordToggleButton');
+        const uploadButton = voiceExtractorModal.querySelector('#uploadButton');
+        const audioUpload = voiceExtractorModal.querySelector('#audioUpload');
+        const clearButton = voiceExtractorModal.querySelector('#clearButton');
+        const statusEl = voiceExtractorModal.querySelector('#status');
+        const transcriptionEl = voiceExtractorModal.querySelector('#transcription');
+        const infoForm = voiceExtractorModal.querySelector('#infoForm');
+
+        // Form Fields (scoped to the modal's form)
+        const nameEl = infoForm.querySelector('#name');
+        const surnameEl = infoForm.querySelector('#surname');
+        const genderEl = infoForm.querySelector('#gender');
+        const dobEl = infoForm.querySelector('#dob');
+        const docTypeEl = infoForm.querySelector('#docType');
+        const idNumberEl = infoForm.querySelector('#idNumber');
+        const addressEl = infoForm.querySelector('#address');
+        const countryEl = infoForm.querySelector('#country');
+
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+        } else {
+            console.warn("Speech Recognition not supported in this browser.");
+            addMessage("Voice sign-up and commands are not fully supported in your browser. Please consider using a browser like Chrome.", 'received');
+        }
+
+        // --- REGEX DEFINITIONS ---
+        const regexPatterns = {
+            name: /(?:my\s+(?:first\s+)?name\s+is|I'm|I\s+am)\s+(?!from\b|at\b|in\b|on\b|by\b|with\b|the\b)([A-Za-z]+)/i,
+            spelled_name: /(?:spell\s+my\s+(?:first\s+)?name|my\s+(?:first\s+)?name\s+is\s+spelled(?:\s+as)?)\s+((?:[A-Za-z](?:\s*|-)?)+)/i,
+            surname: /(?:my\s+surname\s+is|my\s+last\s+name\s+is)\s+([A-Za-z]+)/i,
+            spelled_surname: /(?:spell\s+my\s+surname|my\s+surname\s+is\s+spelled(?:\s+as)?)\s+((?:[A-Za-z](?:\s*|-)?)+)/i,
+            gender: /(?:gender\s+is|I\s+am\s+(?:a\s+)?)(male|female|man|woman|boy|girl)/i,
+            dob: /(?:born\s+on|date\s+of\s+birth\s+is|my\s+birthday\s+is)\s+(?:the\s+)?(\d{1,2})(?:st|nd|rd|th)?\s+(?:of\s+)?(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})/i,
+            sa_id: /(?:ID\s+number\s+(?:is)?|identity\s+number\s+(?:is)?|my\s+ID\s+is)\s+((?:\d\s*)+)/i,
+            passport: /(?:passport\s+number\s+(?:is)?|my\s+passport\s+is)\s+([A-Za-z0-9]+)/i,
+            address: /(?:my\s+address\s+is|I\s+live\s+at)\s+(.*?)(?:\s+in\s+the\s+city|in\s+the\s+town|in\s+the\s+country|,|\.|$)/i,
+            country: /(?:the\s+country\s+is|I'm\s+from|I\s+live\s+in\s+the\s+country\s+of|my\s+country\s+is)\s+(Botswana|Eswatini|Kenya|Lesotho|Malawi|Remitix|Rwanda|South Africa|Uganda|United Kingdom|Zambia|Zimbabwe)/i,
+        };
+
+        // --- UI UPDATE FUNCTIONS for Voice Extractor ---
+        function setRecordingState(isRecordingNow) {
+            isRecording = isRecordingNow;
+            if (isRecording) {
+                recordToggleButton.textContent = 'Stop Recording';
+                recordToggleButton.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                recordToggleButton.classList.add('bg-red-600', 'hover:bg-red-700', 'pulsate');
+                statusEl.textContent = "Status: Listening...";
+                uploadButton.disabled = true;
+                saveAndConfirmBtn.disabled = true; // Disable save button while recording
+            } else {
+                recordToggleButton.textContent = 'Start Recording';
+                recordToggleButton.classList.remove('bg-red-600', 'hover:bg-red-700', 'pulsate');
+                recordToggleButton.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                statusEl.textContent = "Status: Ready";
+                uploadButton.disabled = false;
+                saveAndConfirmBtn.disabled = false; // Enable save button when not recording
+            }
+        }
+
+
+        // --- SPEECH RECOGNITION SETUP ---
+        if (recognition) {
+            recognition.continuous = true; // Keep listening
+            recognition.interimResults = true; // Show results as they come in
+            recognition.lang = 'en-ZA'; // Set for South African English
+
+            recognition.onstart = () => {
+                setRecordingState(true);
+                // Speak "Listening..." but only if the modal is open or it's the very start of the app
+                if (voiceExtractorModal.classList.contains('active') || currentChatContext === CHAT_STATE.INITIAL) {
+                     speak("Listening...");
+                }
+            };
+
+            recognition.onend = () => {
+                setRecordingState(false);
+                // Optional: speak("Stopped listening.") if not immediately restarting
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Speech recognition error:", event.error);
+                statusEl.textContent = `Error: ${event.error}`;
+                setRecordingState(false);
+                if (event.error === 'not-allowed') {
+                    speak('Microphone access denied. Please allow microphone access in your browser settings.');
+                    alert('Microphone access denied. Please allow microphone access in your browser settings.');
+                } else if (event.error === 'no-speech') {
+                    speak('No speech detected. Please try again.');
+                } else if (event.error === 'aborted') {
+                    // This often happens if recognition is manually stopped
+                    speak('Voice input stopped.');
+                }
+                 else {
+                    speak('An error occurred with voice input. Please try again.');
+                }
+            };
+
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                let finalTranscript = '';
+
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript;
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                    }
+                }
+
+                transcriptionEl.innerHTML = `<span class="text-gray-800 font-medium">${finalTranscript}</span><span class="text-gray-500">${interimTranscript}</span>`;
+
+                if (finalTranscript) {
+                    // Process general commands (like "hi", "one", "yes", "no", "menu")
+                    processSpokenCommand(finalTranscript);
+                    // If the voice extractor modal is active, also try to parse transcription for form fields
+                    if (voiceExtractorModal.classList.contains('active')) {
+                        parseTranscription(finalTranscript);
+                    }
+                }
+            };
+        }
+
+        // --- EVENT LISTENERS for Voice Extractor ---
+        recordToggleButton.addEventListener('click', () => {
+            if (!recognition) {
+                alert("Speech Recognition is not supported in your browser.");
+                speak("Speech Recognition is not supported in your browser.");
+                return;
+            }
+            if (isRecording) {
+                recognition.stop();
+            } else {
+                transcriptionEl.innerHTML = ''; // Clear previous transcription
+                infoForm.reset(); // Clear form
+                recognition.start();
+            }
+        });
+
+        uploadButton.addEventListener('click', () => audioUpload.click());
+
+        audioUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Clear previous results
+            infoForm.reset();
+            transcriptionEl.innerHTML = '';
+
+            // Explain the limitation of browser-based file transcription.
+            const fileUploadWarning = `<div class="text-center p-4 bg-yellow-100 border border-yellow-300 rounded-lg">
+                <p class="font-semibold text-yellow-800">Browser Limitation</p>
+                <p class="text-yellow-700 mt-1">Directly transcribing an audio file is not supported by the browser's Web Speech API. This feature requires a server-side process.</p>
+                <p class="text-yellow-700 mt-2">The live 'Start Recording' button uses the browser's built-in microphone transcription service.</p>
+            </div>`;
+            statusEl.textContent = "Status: File Upload Information";
+            transcriptionEl.innerHTML = fileUploadWarning;
+            speak("File upload for transcription is not supported by this browser. Please use the live recording feature.");
+
+            // Reset file input to allow uploading the same file again
+            event.target.value = null;
+        });
+
+
+        clearButton.addEventListener('click', () => {
+            infoForm.reset();
+            transcriptionEl.innerHTML = '';
+            if (isRecording) {
+                recognition.stop();
+            }
+            setRecordingState(false);
+            statusEl.textContent = "Status: Ready"; // Reset status after clearing
+            speak("All fields cleared. Ready for new input.");
+        });
+
+        // Close voice extractor modal (only closes, doesn't confirm)
+        closeVoiceExtractorModalBtn.addEventListener('click', () => {
+            voiceExtractorModal.classList.remove('active');
+            if (isRecording) { // Stop recording if still active when closing modal
+                recognition.stop();
+            }
+            setRecordingState(false); // Reset recording state
+            // Do NOT clear form or transcription here, as user might want to re-open and continue
+            statusEl.textContent = "Status: Ready"; // Reset status
+            addMessage("Voice sign-up window closed. Say 'two' to re-open voice sign-up or 'menu' for other options.", 'received');
+            currentChatContext = CHAT_STATE.SIGNUP_OPTIONS; // Go back to signup options
+        });
+
+        // Save and Confirm button logic
+        saveAndConfirmBtn.addEventListener('click', () => {
+            // Stop recording if still active
+            if (isRecording) {
+                recognition.stop();
+            }
+            setRecordingState(false); // Ensure UI reflects not recording
+
+            // Capture data from the form fields
+            extractedVoiceData = {
+                name: nameEl.value,
+                surname: surnameEl.value,
+                gender: genderEl.value,
+                dob: dobEl.value,
+                // --- FIX: Get the selected text from the dropdown, not its value ---
+                docType: docTypeEl.options[docTypeEl.selectedIndex].text,
+                idNumber: idNumberEl.value,
+                address: addressEl.value,
+                country: countryEl.value
+            };
+
+            voiceExtractorModal.classList.remove('active'); // Hide the modal
+            showScreen(chatScreen); // Ensure chat screen is active
+
+            // Display confirmation in the chat
+            displayVoiceDataConfirmation(extractedVoiceData);
+        });
+
+
+        // --- PARSING LOGIC ---
+        function parseTranscription(text) {
+            let match;
+
+            // Spelled Name Check
+            match = text.match(regexPatterns.spelled_name);
+            if (match && match[1]) {
+                nameEl.value = capitalize(match[1].replace(/[\s-]/g, '').toLowerCase());
+            } else {
+                // Regular Name Check
+                match = text.match(regexPatterns.name);
+                if (match && match[1]) nameEl.value = capitalize(match[1]);
+            }
+
+            // Spelled Surname Check
+            match = text.match(regexPatterns.spelled_surname);
+            if (match && match[1]) {
+                surnameEl.value = capitalize(match[1].replace(/[\s-]/g, '').toLowerCase());
+            } else {
+                // Regular Surname Check
+                match = text.match(regexPatterns.surname);
+                if (match && match[1]) surnameEl.value = capitalize(match[1]);
+            }
+
+            // Gender
+            match = text.match(regexPatterns.gender);
+            if (match && match[1]) genderEl.value = capitalize(match[1].toLowerCase());
+
+            // Date of Birth
+            match = text.match(regexPatterns.dob);
+            if (match && match[1] && match[2] && match[3]) {
+                dobEl.value = formatDate(match[3], match[2], match[1]);
+            }
+
+            // --- AUTOMATIC DOCUMENT TYPE DETECTION ---
+            let idMatch = text.match(regexPatterns.sa_id);
+            let passportMatch = text.match(regexPatterns.passport);
+
+            if (idMatch && idMatch[1]) {
+                docTypeEl.value = 'South African ID'; // Set the actual text value of the option
+                idNumberEl.value = idMatch[1].replace(/\s/g, ''); // Remove spaces
+            } else if (passportMatch && passportMatch[1]) {
+                docTypeEl.value = 'Passport'; // Set the actual text value of the option
+                idNumberEl.value = passportMatch[1];
+            } else {
+                // If neither is detected, clear the doc type and ID number fields
+                docTypeEl.value = '';
+                idNumberEl.value = '';
+            }
+
+            // Address
+            match = text.match(regexPatterns.address);
+            if (match && match[1]) addressEl.value = capitalize(match[1].trim());
+
+            // Country
+            match = text.match(regexPatterns.country);
+            if (match && match[1]) countryEl.value = capitalize(match[1].trim());
+
+        }
+
+        // --- HELPER FUNCTIONS ---
+        function capitalize(s) {
+            if (typeof s !== 'string') return ''
+            return s.charAt(0).toUpperCase() + s.slice(1)
+        }
+
+        function formatDate(year, monthName, day) {
+            const monthMap = {
+                'january': '01', 'february': '02', 'march': '03', 'april': '04', 'may': '05', 'june': '06',
+                'july': '07', 'august': '08', 'september': '09', 'october': '10', 'november': '11', 'december': '12'
+            };
+            const month = monthMap[monthName.toLowerCase()];
+            const formattedDay = day.padStart(2, '0');
+            return `${year}/${month}/${formattedDay}`;
+        }
+
+        // Initial setup when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            displayInitialWelcome();
+            if (recognition) {
+                // Attempt to start recognition automatically for a voice-first experience
+                // Note: Browsers might require user interaction (e.g., a click) before microphone access is granted or continuous recognition starts without a prompt.
+                try {
+                    recognition.start();
+                } catch (e) {
+                    console.warn("Speech recognition could not be started automatically:", e);
+                    // Provide instruction if auto-start fails
+                    addMessage("Please click the 'Start Recording' button or refresh if voice input doesn't begin.", 'received');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
