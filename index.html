@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>WhatsApp Mockup with Voice Extractor</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+       <style>
         /* General styling */
         body {
             font-family: 'Inter', sans-serif;
@@ -151,14 +152,20 @@
             gap: 10px;
         }
 
-        .header .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%; /* Makes the image circular */
-            object-fit: cover; /* Ensures the image covers the area without distortion */
-            background-color: #dcf8c6; /* Placeholder for avatar background */
-            display: block; /* Ensure it behaves like a block element for sizing */
-        }
+        
+ .header .avatar {
+    background-color: #ff9100; /* Mukuru orange */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #ffffff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-weight: bold;
+}
+
 
         .header .name {
             font-weight: 500;
@@ -319,6 +326,10 @@
         /* Voice Extractor specific styles within modal */
         .voice-extractor-container {
             padding: 10px; /* Smaller padding inside the modal */
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 2px 12px rgba(7,94,84,0.08);
+            border: 1.5px solid #ece5dd;
         }
 
         .voice-extractor-container h1 {
@@ -380,6 +391,9 @@
             min-height: 80px; /* Smaller min-height */
             margin-bottom: 15px;
             font-size: 0.85rem; /* Smaller text */
+            background: #f0f0f0;
+            border: 1px solid #ece5dd;
+            color: #075e54;
         }
 
         .voice-extractor-container .status-box p {
@@ -407,35 +421,114 @@
             border-radius: 5px;
             box-sizing: border-box; /* Ensure padding doesn't add to width */
             transition: all 0.2s ease;
+            border: 1.5px solid #ece5dd;
+            background: #fff;
+            color: #222;
+            border-radius: 8px;
         }
 
         .voice-extractor-container input:focus,
         .voice-extractor-container select:focus,
         .voice-extractor-container textarea:focus {
             outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+            border: 1.5px solid #25d366;
+            box-shadow: 0 0 0 2px rgba(37,211,102,0.08);
         }
 
-        .voice-extractor-container .text-center { text-align: center; }
-        .voice-extractor-container .text-gray-800 { color: #1f2937; }
-        .voice-extractor-container .text-gray-500 { color: #6b7280; }
-        .voice-extractor-container .font-semibold { font-weight: 600; }
-        .voice-extractor-container .font-medium { font-weight: 500; }
-        .voice-extractor-container .mt-1 { margin-top: 0.25rem; }
-        .voice-extractor-container .mt-2 { margin-top: 0.5rem; }
-        .voice-extractor-container .mb-1 { margin-bottom: 0.25rem; }
-        .voice-extractor-container .mb-2 { margin-bottom: 0.5rem; }
-        .voice-extractor-container .p-4 { padding: 1rem; }
-        .voice-extractor-container .bg-yellow-100 { background-color: #fef3c7; }
-        .voice-extractor-container .border-yellow-300 { border-color: #fcd34d; }
-        .voice-extractor-container .text-yellow-800 { color: #92400e; }
-        .voice-extractor-container .text-yellow-700 { color: #a16207; }
-        .voice-extractor-container .rounded-lg { border-radius: 0.5rem; }
-        .voice-extractor-container .grid { display: grid; }
-        .voice-extractor-container .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-        .voice-extractor-container .gap-6 { gap: 1.5rem; } /* Adjusted from original to be less drastic */
-        .voice-extractor-container .gap-y-4 { row-gap: 1rem; } /* Added for vertical spacing */
+        /* WhatsApp green and modal integration */
+        .voice-extractor-container {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 2px 12px rgba(7,94,84,0.08);
+            border: 1.5px solid #ece5dd;
+        }
+
+        /* WhatsApp-style header for voice extractor */
+        .wa-voice-header {
+            margin-bottom: 18px;
+        }
+        .wa-mic-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #25d366;
+            color: #fff;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 8px rgba(7,94,84,0.10);
+        }
+        .wa-voice-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #075e54;
+            margin: 10px 0 2px 0;
+        }
+        .wa-voice-desc {
+            color: #4a5568;
+            font-size: 0.97rem;
+            margin-bottom: 0;
+        }
+
+        /* WhatsApp-style waveform animation */
+        .wa-waveform {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 18px;
+            margin-bottom: 6px;
+            gap: 2px;
+        }
+        .wa-waveform span {
+            display: block;
+            width: 3px;
+            height: 10px;
+            background: #25d366;
+            border-radius: 2px;
+            animation: wa-wave 1s infinite ease-in-out;
+        }
+        .wa-waveform span:nth-child(2) { animation-delay: 0.2s; }
+        .wa-waveform span:nth-child(3) { animation-delay: 0.4s; }
+        .wa-waveform span:nth-child(4) { animation-delay: 0.6s; }
+        .wa-waveform span:nth-child(5) { animation-delay: 0.8s; }
+        @keyframes wa-wave {
+            0%, 100% { height: 10px; }
+            50% { height: 18px; }
+        }
+
+        /* WhatsApp-style buttons for extractor */
+        .voice-extractor-container .controls button {
+            background: #25d366;
+            color: #fff;
+            border: none;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .voice-extractor-container .controls button.bg-blue-600 {
+            background: #25d366;
+        }
+        .voice-extractor-container .controls button.bg-red-600 {
+            background: #ea4335;
+        }
+        .voice-extractor-container .controls button.bg-green-600 {
+            background: #075e54;
+        }
+        .voice-extractor-container .controls button.bg-gray-500 {
+            background: #ece5dd;
+            color: #075e54;
+        }
+        .voice-extractor-container .controls button:hover {
+            filter: brightness(0.95);
+        }
+
+        /* Responsive tweaks for modal */
+        @media (max-width: 480px) {
+            .voice-extractor-container {
+                border-radius: 0;
+            }
+        }
 
 
         /* Responsive adjustments */
@@ -527,6 +620,102 @@
                 gap: 5px; /* Smaller gap between buttons */
             }
         }
+
+        /* New styles for voice extractor header */
+        .wa-voice-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .wa-mic-circle {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #e1f5fe;
+            color: #01579b;
+            font-size: 2.5rem;
+            line-height: 60px;
+            text-align: center;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .wa-mic-circle i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .wa-waveform {
+            display: inline-block;
+            height: 20px;
+            margin-bottom: 10px;
+        }
+
+        .wa-waveform span {
+            display: inline-block;
+            width: 4px;
+            height: 100%;
+            margin-right: 2px;
+            background-color: #4caf50;
+            animation: wave-animation 1s infinite;
+        }
+
+        @keyframes wave-animation {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.5); }
+        }
+
+        .wa-voice-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .wa-voice-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .wa-meta {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.78em;      /* Make meta info (ticks + time) small */
+            color: #8696a0;         /* WhatsApp's subtle meta color */
+            margin-left: 8px;
+            vertical-align: bottom;
+        }
+
+        .wa-timestamp {
+            font-size: 0.78em;      /* Small timestamp */
+            color: #8696a0;
+            margin-right: 2px;
+        }
+
+        .wa-tick {
+            color: #34b7f1 !important; /* WhatsApp blue tick */
+            font-size: 1em;
+            margin-left: 2px;
+            vertical-align: middle;
+        }
+
+        /* Ensure the meta info is at the bottom right of the bubble */
+        .message-bubble {
+            position: relative;
+            padding-bottom: 18px; /* Space for meta info */
+        }
+
+        .message-bubble .wa-meta {
+            position: absolute;
+            right: 12px;
+            bottom: 4px;
+            background: transparent;
+        }
+
     </style>
 </head>
 <body>
@@ -544,7 +733,7 @@
                 <div class="left">
                     <i class="fas fa-arrow-left icons" id="chatBackBtn"></i>
                     <div class="contact-info">
-                        <img src="logo mukuru 2.png" alt="Mukuru Logo" class="avatar">
+                        <img src="logo mukuru 2.png" alt="Mukuru Logo" class="avatar" style="width:32px;height:32px;margin-right:8px;">
                         <span class="name">Mukuru</span>
                     </div>
                 </div>
@@ -621,8 +810,20 @@
                             <input type="text" id="idNumber" class="form-input">
                         </div>
                         <div class="form-group md:col-span-2">
-                            <label for="address" class="block text-sm font-medium">Address</label>
-                            <textarea id="address" rows="2" class="form-input"></textarea>
+                            <label for="streetAddress" class="block text-sm font-medium">Street Address</label>
+                            <input type="text" id="streetAddress" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="suburb" class="block text-sm font-medium">Suburb</label>
+                            <input type="text" id="suburb" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="city" class="block text-sm font-medium">City</label>
+                            <input type="text" id="city" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="postalCode" class="block text-sm font-medium">Postal Code</label>
+                            <input type="text" id="postalCode" class="form-input">
                         </div>
                         <div class="form-group md:col-span-2">
                             <label for="country" class="block text-sm font-medium">Country</label>
@@ -630,7 +831,7 @@
                         </div>
                     </form>
                 </div>
-                <button id="saveAndConfirmBtn" class="primary" style="margin-top: 20px; width: 90%; align-self: center;">
+                <button id="saveAndConfirmBtn" class="primary" style="margin-top: 25px; width: 95%; align-self: center;">
                     Go back to WA / Save & Confirm
                 </button>
             </div>
@@ -678,6 +879,7 @@
             SIGNUP_OPTIONS: 'signup_options',
             VOICE_SIGNUP_ACTIVE: 'voice_signup_active',
             CONFIRM_VOICE_DATA: 'confirm_voice_data',
+            T_AND_C: 't_and_c', // <-- Add this
             CHATTING: 'chatting'
         };
         let currentChatContext = CHAT_STATE.INITIAL;
@@ -778,6 +980,83 @@
         function processSpokenCommand(commandText) {
             const lowerCaseCommand = commandText.toLowerCase().trim();
 
+            // --- START/STOP RECORDING BY VOICE ---
+            if (lowerCaseCommand.includes('start recording')) {
+                if (!isRecording && voiceExtractorModal.classList.contains('active')) {
+                    recordToggleButton.click();
+                    return;
+                }
+            } else if (lowerCaseCommand.includes('stop recording')) {
+                if (isRecording && voiceExtractorModal.classList.contains('active')) {
+                    recordToggleButton.click();
+                    return;
+                }
+            }
+
+            // --- SAVE AND CONFIRM BY VOICE ---
+            if (lowerCaseCommand.includes('save') && voiceExtractorModal.classList.contains('active')) {
+                // Stop recording if still active
+                if (isRecording) {
+                    recognition.stop();
+                    setRecordingState(false);
+                }
+
+                // --- VALIDATION LOGIC (same as saveAndConfirmBtn) ---
+                let missingFields = [];
+                if (!nameEl.value.trim()) missingFields.push("Name");
+                if (!surnameEl.value.trim()) missingFields.push("Surname");
+                if (!genderEl.value.trim()) missingFields.push("Gender");
+                if (!dobEl.value.trim()) missingFields.push("Date of Birth");
+                if (!docTypeEl.value.trim() || docTypeEl.value === "") missingFields.push("Document Type");
+                if (!idNumberEl.value.trim()) missingFields.push("ID / Passport Number");
+                if (!streetAddressEl.value.trim()) missingFields.push("Street Address");
+                if (!suburbEl.value.trim()) missingFields.push("Suburb");
+                if (!cityEl.value.trim()) missingFields.push("City");
+                if (!postalCodeEl.value.trim() || !/^\d{4,6}$/.test(postalCodeEl.value.trim())) missingFields.push("Postal Code");
+                if (!countryEl.value.trim()) missingFields.push("Country");
+
+                if (missingFields.length > 0) {
+                    statusEl.textContent = "Status: Please complete the following fields: " + missingFields.join(", ") + ".";
+                    speak("Please complete the following fields: " + missingFields.join(", "));
+                    // Focus the first missing field
+                    const fieldMap = {
+                        "Name": nameEl,
+                        "Surname": surnameEl,
+                        "Gender": genderEl,
+                        "Date of Birth": dobEl,
+                        "Document Type": docTypeEl,
+                        "ID / Passport Number": idNumberEl,
+                        "Street Address": streetAddressEl,
+                        "Suburb": suburbEl,
+                        "City": cityEl,
+                        "Postal Code": postalCodeEl,
+                        "Country": countryEl
+                    };
+                    fieldMap[missingFields[0]].focus();
+                    return;
+                }
+
+                // If all fields are present, save and show extracted info
+                const fullAddress = `${streetAddressEl.value.trim()}, ${suburbEl.value.trim()}, ${cityEl.value.trim()}, ${postalCodeEl.value.trim()}`;
+                extractedVoiceData = {
+                    name: nameEl.value,
+                    surname: surnameEl.value,
+                    gender: genderEl.value,
+                    dob: dobEl.value,
+                    docType: docTypeEl.options[docTypeEl.selectedIndex].text,
+                    idNumber: idNumberEl.value,
+                    address: fullAddress,
+                    country: countryEl.value
+                };
+
+                voiceExtractorModal.classList.remove('active'); // Hide the modal
+                showScreen(chatScreen); // Ensure chat screen is active
+
+                // Display confirmation in the chat
+                displayVoiceDataConfirmation(extractedVoiceData);
+                return;
+            }
+
             if (lowerCaseCommand.includes('hi') || lowerCaseCommand.includes('hello')) {
                 messageInput.value = 'hi';
                 sendMessage();
@@ -811,10 +1090,10 @@
             }
             // Additions for "sign up manually" and "sign up with voice"
             else if (currentChatContext === CHAT_STATE.SIGNUP_OPTIONS) {
-                if (lowerCaseCommand.includes('sign up manually')) {
+                if (lowerCaseCommand.includes(' manually')) {
                     messageInput.value = '1';
                     sendMessage();
-                } else if (lowerCaseCommand.includes('sign up with voice') || lowerCaseCommand.includes('sign up by voice')) {
+                } else if (lowerCaseCommand.includes('voice') || lowerCaseCommand.includes('2') || lowerCaseCommand.includes('two')) {
                     messageInput.value = '2';
                     sendMessage();
                 }
@@ -835,6 +1114,7 @@
         function sendMessage() {
             const messageText = messageInput.value.trim();
             if (!messageText) return; // Don't send empty messages
+            
 
             addMessage(messageText, 'sent'); // Add user's message to chat
             messageInput.value = ''; // Clear input
@@ -872,14 +1152,18 @@
 
                 case CHAT_STATE.SIGNUP_OPTIONS:
                     if (lowerCaseMessage === '1') {
-                        showScreen(signupScreen); // Transition to the actual signup form
+                        showScreen(signupScreen);
                         addMessage("Please fill in your details to register.", 'received');
-                        currentChatContext = CHAT_STATE.CHATTING; // Assuming user will complete signup outside chat
+                        currentChatContext = CHAT_STATE.CHATTING;
                     } else if (lowerCaseMessage === '2') {
-                        // Show the voice extractor modal
                         voiceExtractorModal.classList.add('active');
                         addMessage("Voice sign-up initiated. Please speak into your microphone or upload a file in the popup window.", 'received');
-                        currentChatContext = CHAT_STATE.VOICE_SIGNUP_ACTIVE; // Set new state
+                        currentChatContext = CHAT_STATE.VOICE_SIGNUP_ACTIVE;
+                        // --- Start recording automatically ---
+                        if (recognition && !isRecording) {
+                            transcriptionEl.innerHTML = '';
+                            recognition.start();
+                        }
                     } else {
                         addMessage("Invalid option. Please choose '1' for Manual Sign Up or '2' for Voice Sign Up.", 'received');
                     }
@@ -896,36 +1180,64 @@
                 case CHAT_STATE.VOICE_SIGNUP_ACTIVE:
                     addMessage("The voice sign-up window is still open. Please interact with it directly. Say 'cancel voice' to close it.", 'received');
                     if (lowerCaseMessage === 'cancel voice') {
-                        voiceExtractorModal.classList.remove('active');
-                        // Clear voice form and transcription upon cancellation
-                        infoForm.reset();
-                        transcriptionEl.innerHTML = '';
-                        statusEl.textContent = "Status: Ready";
-                        if (isRecording) recognition.stop();
-                        setRecordingState(false);
-
-                        addMessage("Voice sign-up cancelled. What else can I help you with?", 'received');
-                        displayMainMenu(); // Go back to main menu or a previous state
+                        messageInput.value = 'cancel voice';
+                        sendMessage();
                     }
                     break;
 
                 case CHAT_STATE.CONFIRM_VOICE_DATA: // NEW CONFIRMATION STATE
                     if (lowerCaseMessage === 'yes') {
-                        addMessage("Great! Your details have been successfully captured for registration. We'll proceed with your signup now.", 'received');
+                        addMessage("Great! Your details have been successfully captured for registration. Please accept the following T+C's. Terms and Conditions:\n1. You agree to provide accurate and truthful information.\n2. Your data will be used for registration and verification purposes only.\n3. Mukuru will not share your personal information with third parties without your consent.\n4. By signing up, you agree to comply with all applicable laws and Mukuru\'s policies.\nDo you accept these terms and conditions? Please say \`Yes\` to accept or \'No\' to cancel.;", 'received');
                         // Here you would typically send `extractedVoiceData` to your backend for final registration
                         console.log("Final confirmed data:", extractedVoiceData);
-                        currentChatContext = CHAT_STATE.CHATTING; // Return to general chatting
-                        displayMainMenu(); // Optionally, go back to main menu
+                        currentChatContext = CHAT_STATE.T_AND_C; // Return to general chatting
+                        // displayMainMenu(); // Optionally, go back to main menu
                     } else if (lowerCaseMessage === 'no') {
                         addMessage("Okay, please re-record your details in the voice capture window. Opening it for you now.", 'received');
                         voiceExtractorModal.classList.add('active');
-                        // Clear form and transcription to ensure a fresh start for re-record
-                        infoForm.reset();
+                        // --- PREFILL FORM WITH PREVIOUS DATA ---
+                        nameEl.value = extractedVoiceData.name || '';
+                        surnameEl.value = extractedVoiceData.surname || '';
+                        genderEl.value = extractedVoiceData.gender || '';
+                        dobEl.value = extractedVoiceData.dob || '';
+                        // Set docType by value (if available)
+                        if (extractedVoiceData.docType) {
+                            for (let i = 0; i < docTypeEl.options.length; i++) {
+                                if (docTypeEl.options[i].text === extractedVoiceData.docType) {
+                                    docTypeEl.selectedIndex = i;
+                                    break;
+                                }
+                            }
+                        } else {
+                            docTypeEl.selectedIndex = 0;
+                        }
+                        idNumberEl.value = extractedVoiceData.idNumber || '';
+                        streetAddressEl.value = extractedVoiceData.streetAddress || '';
+                        suburbEl.value = extractedVoiceData.suburb || '';
+                        cityEl.value = extractedVoiceData.city || '';
+                        postalCodeEl.value = extractedVoiceData.postalCode || '';
+                        countryEl.value = extractedVoiceData.country || '';
                         transcriptionEl.innerHTML = '';
                         statusEl.textContent = "Status: Ready";
-                        currentChatContext = CHAT_STATE.VOICE_SIGNUP_ACTIVE; // Go back to voice capture state
+                        currentChatContext = CHAT_STATE.VOICE_SIGNUP_ACTIVE;
                     } else {
                         addMessage("Please respond with 'Yes' or 'No' to confirm the details.", 'received');
+                    }
+                    break;
+
+                case CHAT_STATE.T_AND_C:
+                    if (lowerCaseMessage === 'yes') {
+                        addMessage("Thank you! You have successfully signed up. Welcome to Mukuru!", 'received');
+                        speak("Thank you! You have successfully signed up. Welcome to Mukuru!");
+                        currentChatContext = CHAT_STATE.CHATTING;
+                        displayMainMenu();
+                    } else if (lowerCaseMessage === 'no') {
+                        addMessage("You have declined the terms and conditions. Registration cancelled.", 'received');
+                        speak("You have declined the terms and conditions. Registration cancelled.");
+                        currentChatContext = CHAT_STATE.MAIN_MENU;
+                        displayMainMenu();
+                    } else {
+                        addMessage("Please say 'Yes' to accept the terms and conditions or 'No' to cancel.", 'received');
                     }
                     break;
 
@@ -1002,7 +1314,10 @@
         const dobEl = infoForm.querySelector('#dob');
         const docTypeEl = infoForm.querySelector('#docType');
         const idNumberEl = infoForm.querySelector('#idNumber');
-        const addressEl = infoForm.querySelector('#address');
+        const streetAddressEl = infoForm.querySelector('#streetAddress');
+        const suburbEl = infoForm.querySelector('#suburb');
+        const cityEl = infoForm.querySelector('#city');
+        const postalCodeEl = infoForm.querySelector('#postalCode');
         const countryEl = infoForm.querySelector('#country');
 
         if (SpeechRecognition) {
@@ -1014,17 +1329,34 @@
 
         // --- REGEX DEFINITIONS ---
         const regexPatterns = {
-            name: /(?:my\s+(?:first\s+)?name\s+is|I'm|I\s+am)\s+(?!from\b|at\b|in\b|on\b|by\b|with\b|the\b)([A-Za-z]+)/i,
-            spelled_name: /(?:spell\s+my\s+(?:first\s+)?name|my\s+(?:first\s+)?name\s+is\s+spelled(?:\s+as)?)\s+((?:[A-Za-z](?:\s*|-)?)+)/i,
-            surname: /(?:my\s+surname\s+is|my\s+last\s+name\s+is)\s+([A-Za-z]+)/i,
+            name: /(?:my\s+(?:first\s+)?name\s+is|I'm|I\s+am)\s+(?!from\b|at\b|in\b|on\b|by\b|with\b|the\b|male\b|female\b|man\b|woman\b|boy\b|girl\b|)([A-Za-z]{2,})/i,
+            spelled_name: /(?:spell\s+my\s+(?:first\s+)?name|my\s+(?:first\s+)?name\s+is\s+spelled(?:\s+as)?)\s+((?:[A-Za-z](?:\s*|-|\s+)?)+)/i,
+            surname: /(?:my\s+surname\s+is|my\s+last\s+name\s+is|surname\s+is)\s+([A-Za-z]+)/i,
             spelled_surname: /(?:spell\s+my\s+surname|my\s+surname\s+is\s+spelled(?:\s+as)?)\s+((?:[A-Za-z](?:\s*|-)?)+)/i,
-            gender: /(?:gender\s+is|I\s+am\s+(?:a\s+)?)(male|female|man|woman|boy|girl)/i,
-            dob: /(?:born\s+on|date\s+of\s+birth\s+is|my\s+birthday\s+is)\s+(?:the\s+)?(\d{1,2})(?:st|nd|rd|th)?\s+(?:of\s+)?(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})/i,
-            sa_id: /(?:ID\s+number\s+(?:is)?|identity\s+number\s+(?:is)?|my\s+ID\s+is)\s+((?:\d\s*)+)/i,
-            passport: /(?:passport\s+number\s+(?:is)?|my\s+passport\s+is)\s+([A-Za-z0-9]+)/i,
-            address: /(?:my\s+address\s+is|I\s+live\s+at)\s+(.*?)(?:\s+in\s+the\s+city|in\s+the\s+town|in\s+the\s+country|,|\.|$)/i,
-            country: /(?:the\s+country\s+is|I'm\s+from|I\s+live\s+in\s+the\s+country\s+of|my\s+country\s+is)\s+(Botswana|Eswatini|Kenya|Lesotho|Malawi|Remitix|Rwanda|South Africa|Uganda|United Kingdom|Zambia|Zimbabwe)/i,
+            gender: /(male|female|man|woman)/i,
+            dob: /(?:born\s+on|date\s+of\s+birth\s+is|my\s+birthday\s+is|dob[:\s]*)?\s*(?:(?:the\s+)?(\d{1,2})(?:st|nd|rd|th)?\s+(?:of\s+)?(January|February|March|April|May|June|July|August|September|October|November|December)[,]?\s+(\d{4})|(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{1,2})(?:st|nd|rd|th)?[,]?\s+(\d{4})|(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})|(\d{4})[\/\-.](\d{1,2})[\/\-.](\d{1,2}))\b/i,
+            sa_id: /(?:ID\s+number\s+(?:is)?|identity\s+number\s+(?:is)?|my\s+ID\s+is)\s+((?:\d\s*){13})/i, // Added 'my ID is'
+            passport: /(?:passport\s+number\s+(?:is)?|my\s+passport\s+is)\s+([A-Za-z0-9]+)/i, // Added 'my passport is'
+            address: /(?:my\s+address\s+is|i\s+live\s+at|residing\s+at|located\s+at)\s+((?:(?!\b(?:Gaborone|Francistown|Maun|Molepolole|Mbabane|Manzini|Lobamba|Siteki|Nairobi|Mombasa|Kisumu|Nakuru|Eldoret|Maseru|Teyateyaneng|Mafeteng|Hlotse|Lilongwe|Blantyre|Mzuzu|Zomba|Kigali|Butare|Gisenyi|Ruhengeri|Johannesburg|Cape\sTown|Durban|Pretoria|Port\sElizabeth|Bloemfontein|Kampala|Entebbe|Gulu|Jinja|Mbarara|London|Birmingham|Manchester|Glasgow|Leeds|Liverpool|Bristol|Lusaka|Ndola|Kitwe|Livingstone|Harare|Bulawayo|Mutare|Gweru|Masvingo|Edenvale|Sandton|Bryanston|Linden|Parkhurst|Rosebank|Ferndale|Sunninghill|Bedfordview|Midrand|Maboneng|Northcliff|Greenside|Kempton\sPark|Randburg|Waverley|Soweto|Roodepoort|Germiston|Claremont|Newlands|Constantia|Observatory|Muizenberg|Hout\sBay|Camps\sBay|Durbanville|Bellville|Parow|Pinelands|Rondebosch|Mowbray|Ottery|Kenilworth|Athlone|Salt\sRiver|Botswana|Eswatini|Kenya|Lesotho|Malawi|Rwanda|South\sAfrica|Uganda|United\sKingdom|Zambia|Zimbabwe|\\d{4,6})\\b)[\\w\\s\\/-])+)/i,
+            city: /(Gaborone|Francistown|Maun|Molepolole|Mbabane|Manzini|Lobamba|Siteki|Nairobi|Mombasa|Kisumu|Nakuru|Eldoret|Maseru|Teyateyaneng|Mafeteng|Hlotse|Lilongwe|Blantyre|Mzuzu|Zomba|Kigali|Butare|Gisenyi|Ruhengeri|Johannesburg|Cape\sTown|Durban|Pretoria|Port\sElizabeth|Bloemfontein|Kampala|Entebbe|Gulu|Jinja|Mbarara|London|Birmingham|Manchester|Glasgow|Leeds|Liverpool|Bristol|Lusaka|Ndola|Kitwe|Livingstone|Harare|Bulawayo|Mutare|Gweru|Masvingo)/i,
+            suburb: /(Edenvale|Sandton|Bryanston|Linden|Parkhurst|Rosebank|Ferndale|Sunninghill|Bedfordview|Midrand|Maboneng|Northcliff|Greenside|Kempton\sPark|Randburg|Waverley|Soweto|Roodepoort|Germiston|Claremont|Newlands|Constantia|Observatory|Muizenberg|Hout\sBay|Camps\sBay|Durbanville|Bellville|Parow|Pinelands|Rondebosch|Mowbray|Ottery|Kenilworth|Athlone|Salt\sRiver)/i,
+            country: /(Botswana|Eswatini|Kenya|Lesotho|Malawi|Rwanda|South Africa|Uganda|United Kingdom|Zambia|Zimbabwe)/i,
+            postalCode: /\b\d{4,6}\b/,
         };
+
+        // const exclusions = [
+        // regexPatterns.city,
+        // regexPatterns.suburb,
+        // regexPatterns.country,
+        // regexPatterns.postalCode
+        // ];
+
+        // const exclusionPattern = exclusions.map(r => r.source).join('|');
+
+        // regexPatterns.address = new RegExp(
+        // `(?:my\\s+address\\s+is|i\\s+live\\s+at|residing\\s+at|located\\s+at)\\s+((?:(?!\\b(?:${exclusionPattern})\\b)[^\\.,])+)+`,
+        // 'i'
+        // );
 
         // --- UI UPDATE FUNCTIONS for Voice Extractor ---
         function setRecordingState(isRecordingNow) {
@@ -1119,34 +1451,28 @@
             if (isRecording) {
                 recognition.stop();
             } else {
-                transcriptionEl.innerHTML = ''; // Clear previous transcription
-                infoForm.reset(); // Clear form
+                transcriptionEl.innerHTML = ''; // Clear only the transcription display
+                // Do NOT reset the form here, so previously captured info remains
                 recognition.start();
             }
         });
 
         uploadButton.addEventListener('click', () => audioUpload.click());
 
+       // Event listener for audio file upload
         audioUpload.addEventListener('change', (event) => {
             const file = event.target.files[0];
-            if (!file) return;
-
-            // Clear previous results
-            infoForm.reset();
-            transcriptionEl.innerHTML = '';
-
-            // Explain the limitation of browser-based file transcription.
-            const fileUploadWarning = `<div class="text-center p-4 bg-yellow-100 border border-yellow-300 rounded-lg">
-                <p class="font-semibold text-yellow-800">Browser Limitation</p>
-                <p class="text-yellow-700 mt-1">Directly transcribing an audio file is not supported by the browser's Web Speech API. This feature requires a server-side process.</p>
-                <p class="text-yellow-700 mt-2">The live 'Start Recording' button uses the browser's built-in microphone transcription service.</p>
-            </div>`;
-            statusEl.textContent = "Status: File Upload Information";
-            transcriptionEl.innerHTML = fileUploadWarning;
-            speak("File upload for transcription is not supported by this browser. Please use the live recording feature.");
-
-            // Reset file input to allow uploading the same file again
-            event.target.value = null;
+            if (file) {
+                 statusEl.textContent = `Processing uploaded file...`;
+                 transcriptionEl.innerHTML = `<p class="text-gray-400">Processing...</p>`;
+                //  resetExtractedInfo();
+                setTimeout(() => {
+                    const mockTranscript = "Hello my name is spelled N Q O B I L E. My surname is spelled M T H O M B E N I. My ID number is 0004110090083 . I live at 12 Jasper Crescent, Edenvale, Johannesburg, 1609";
+                    transcriptionEl.innerHTML = `<p>${mockTranscript}</p>`;
+                    parseTranscription(mockTranscript);
+                    statusEl.textContent = `File processed.`;
+                }, 2000);
+            }
         });
 
 
@@ -1174,33 +1500,98 @@
             currentChatContext = CHAT_STATE.SIGNUP_OPTIONS; // Go back to signup options
         });
 
-        // Save and Confirm button logic
-        saveAndConfirmBtn.addEventListener('click', () => {
-            // Stop recording if still active
-            if (isRecording) {
-                recognition.stop();
-            }
-            setRecordingState(false); // Ensure UI reflects not recording
+        // --- Address Validation Helper ---
+function validateAddressFields(addressValue) {
+    // Simple checks for address, suburb, and postal code (can be improved)
+    // Example: "12 Jasper Crescent, Greenstone Hill, 1609"
+    const parts = addressValue.split(',');
+    const address = parts[0] ? parts[0].trim() : '';
+    const suburb = parts[1] ? parts[1].trim() : '';
+    const postalCode = parts[2] ? parts[2].trim() : '';
 
-            // Capture data from the form fields
-            extractedVoiceData = {
-                name: nameEl.value,
-                surname: surnameEl.value,
-                gender: genderEl.value,
-                dob: dobEl.value,
-                // --- FIX: Get the selected text from the dropdown, not its value ---
-                docType: docTypeEl.options[docTypeEl.selectedIndex].text,
-                idNumber: idNumberEl.value,
-                address: addressEl.value,
-                country: countryEl.value
-            };
+    let missing = [];
+    if (!address) missing.push("street address");
+    if (!suburb) missing.push("suburb");
+    if (!postalCode || !/^\d{4,6}$/.test(postalCode)) missing.push("postal code");
 
-            voiceExtractorModal.classList.remove('active'); // Hide the modal
-            showScreen(chatScreen); // Ensure chat screen is active
+    return { valid: missing.length === 0, missing, address, suburb, postalCode };
+}
 
-            // Display confirmation in the chat
-            displayVoiceDataConfirmation(extractedVoiceData);
-        });
+// --- Enhanced Save and Confirm button logic ---
+saveAndConfirmBtn.addEventListener('click', () => {
+    let missingFields = [];
+
+    if (!nameEl.value.trim()) missingFields.push("Name");
+    if (!surnameEl.value.trim()) missingFields.push("Surname");
+    if (!genderEl.value.trim()) missingFields.push("Gender");
+    if (!dobEl.value.trim()) missingFields.push("Date of Birth");
+    if (!docTypeEl.value.trim() || docTypeEl.value === "") missingFields.push("Document Type");
+    if (!idNumberEl.value.trim()) missingFields.push("ID / Passport Number");
+    if (!countryEl.value.trim()) missingFields.push("Country");
+
+    // --- Address validation ---
+    if (!streetAddressEl.value.trim()) missingFields.push("Street Address");
+    if (!suburbEl.value.trim()) missingFields.push("Suburb");
+    if (!cityEl.value.trim()) missingFields.push("City");
+    if (!postalCodeEl.value.trim() || !/^\d{4,6}$/.test(postalCodeEl.value.trim())) missingFields.push("Postal Code");
+
+    if (missingFields.length > 0) {
+        let promptMsg = "Status: Please complete the following fields: " + missingFields.join(", ") + ".";
+        statusEl.textContent = promptMsg;
+        // If any address part is missing, give a specific prompt
+        if (
+            missingFields.includes("Street Address") ||
+            missingFields.includes("Suburb") ||
+            missingFields.includes("City") ||
+            missingFields.includes("Postal Code")
+        ) {
+            speak("Please provide your full address: street address, suburb, city, and postal code. For example: 12 Jasper Crescent, Greenstone Hill, Edenvale, 1609.");
+            statusEl.textContent += " Example: 12 Jasper Crescent, Greenstone Hill, Edenvale, 1609.";
+        } else {
+            speak("Please complete the following fields: " + missingFields.join(", "));
+        }
+        // Focus the first missing field
+        const fieldMap = {
+            "Name": nameEl,
+            "Surname": surnameEl,
+            "Gender": genderEl,
+            "Date of Birth": dobEl,
+            "Document Type": docTypeEl,
+            "ID / Passport Number": idNumberEl,
+            "Street Address": streetAddressEl,
+            "Suburb": suburbEl,
+            "City": cityEl,
+            "Postal Code": postalCodeEl,
+            "Country": countryEl
+        };
+        fieldMap[missingFields[0]].focus();
+        return;
+    }
+
+    // Stop recording if still active
+    if (isRecording) {
+        recognition.stop();
+    }
+    setRecordingState(false);
+
+    // Combine address fields into one string
+    const fullAddress = `${streetAddressEl.value.trim()}, ${suburbEl.value.trim()}, ${cityEl.value.trim()}, ${postalCodeEl.value.trim()}`;
+
+    extractedVoiceData = {
+        name: nameEl.value,
+        surname: surnameEl.value,
+        gender: genderEl.value,
+        dob: dobEl.value,
+        docType: docTypeEl.options[docTypeEl.selectedIndex].text,
+        idNumber: idNumberEl.value,
+        address: fullAddress,
+        country: countryEl.value
+    };
+
+    voiceExtractorModal.classList.remove('active');
+    showScreen(chatScreen);
+    displayVoiceDataConfirmation(extractedVoiceData);
+});
 
 
         // --- PARSING LOGIC ---
@@ -1247,19 +1638,33 @@
             } else if (passportMatch && passportMatch[1]) {
                 docTypeEl.value = 'Passport'; // Set the actual text value of the option
                 idNumberEl.value = passportMatch[1];
-            } else {
-                // If neither is detected, clear the doc type and ID number fields
-                docTypeEl.value = '';
-                idNumberEl.value = '';
             }
 
-            // Address
-            match = text.match(regexPatterns.address);
-            if (match && match[1]) addressEl.value = capitalize(match[1].trim());
+            // Address extraction (try to split by commas)
+            let addressMatch = text.match(/(?:my\s+address\s+is|i\s+live\s+at)\s+(.+)/i);
+            if (addressMatch && addressMatch[1]) {
+                const parts = addressMatch[1].split(',');
+                streetAddressEl.value = parts[0] ? capitalize(parts[0].trim()) : '';
+                suburbEl.value = parts[1] ? capitalize(parts[1].trim()) : '';
+                cityEl.value = parts[2] ? capitalize(parts[2].trim()) : '';
+                postalCodeEl.value = parts[3] ? parts[3].trim() : '';
+            }
+
+            // City
+            match = text.match(regexPatterns.suburb);
+            if (match && match[1]) suburbEl.value = capitalize(match[1].trim());
+
+            // City
+            match = text.match(regexPatterns.city);
+            if (match && match[1]) cityEl.value = capitalize(match[1].trim());
 
             // Country
             match = text.match(regexPatterns.country);
             if (match && match[1]) countryEl.value = capitalize(match[1].trim());
+
+            // Postal Code
+            match = text.match(regexPatterns.postalCode);
+            if (match && match[1]) postalCodeEl = capitalize(match[1].trim());
 
         }
 
@@ -1294,6 +1699,20 @@
                 }
             }
         });
+
+        // Function to display and read T&Cs
+        function displayTermsAndConditions() {
+            const tncText = `Terms and Conditions:
+1. You agree to provide accurate and truthful information.
+2. Your data will be used for registration and verification purposes only.
+3. Mukuru will not share your personal information with third parties without your consent.
+4. By signing up, you agree to comply with all applicable laws and Mukuru's policies.
+
+Do you accept these terms and conditions? Please say 'Yes' to accept or 'No' to cancel.`;
+            addMessage(tncText, 'received');
+            speak(tncText);
+            currentChatContext = CHAT_STATE.T_AND_C;
+        }
     </script>
 </body>
 </html>
