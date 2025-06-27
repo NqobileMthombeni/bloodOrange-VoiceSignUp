@@ -733,7 +733,7 @@
                 <div class="left">
                     <i class="fas fa-arrow-left icons" id="chatBackBtn"></i>
                     <div class="contact-info">
-                        <img src="logo mukuru 2.png" alt="Mukuru Logo" class="avatar" style="width:32px;height:32px;margin-right:8px;">
+                        <img src="/images/logo mukuru 2.png" alt="Mukuru Logo" class="avatar" style="width:32px;height:32px;margin-right:8px;">
                         <span class="name">Mukuru</span>
                     </div>
                 </div>
@@ -1112,6 +1112,7 @@
          * Handles sending messages and managing chat flow.
          */
         function sendMessage() {
+            window.speechSynthesis.cancel(); // Stop any ongoing speech
             const messageText = messageInput.value.trim();
             if (!messageText) return; // Don't send empty messages
             
@@ -1187,7 +1188,7 @@
 
                 case CHAT_STATE.CONFIRM_VOICE_DATA: // NEW CONFIRMATION STATE
                     if (lowerCaseMessage === 'yes') {
-                        addMessage("Great! Your details have been successfully captured for registration. Please accept the following T+C's. Terms and Conditions:\n1. You agree to provide accurate and truthful information.\n2. Your data will be used for registration and verification purposes only.\n3. Mukuru will not share your personal information with third parties without your consent.\n4. By signing up, you agree to comply with all applicable laws and Mukuru\'s policies.\nDo you accept these terms and conditions? Please say \`Yes\` to accept or \'No\' to cancel.;", 'received');
+                        addMessage("Great! Your details have been successfully captured for registration. Please accept the following T+C's. Terms and Conditions:\n1. You agree to provide accurate and truthful information.\n2. By signing up, you agree to comply with all applicable laws and Mukuru's policies.\nDo you accept these terms and conditions? Please say `Yes` to accept or 'No' to cancel.;", 'received');
                         // Here you would typically send `extractedVoiceData` to your backend for final registration
                         console.log("Final confirmed data:", extractedVoiceData);
                         currentChatContext = CHAT_STATE.T_AND_C; // Return to general chatting
@@ -1261,6 +1262,7 @@
         const passwordInput = document.getElementById('passwordInput');
 
         registerBtn.addEventListener('click', () => {
+            window.speechSynthesis.cancel(); // Stop any ongoing speech
             const username = usernameInput.value.trim();
             const password = passwordInput.value.trim();
 
@@ -1283,12 +1285,14 @@
 
         // --- Back Button Logic ---
         signupBackBtn.addEventListener('click', () => {
+            window.speechSynthesis.cancel(); // Stop any ongoing speech
             showScreen(chatScreen); // Return to chat screen
             displaySignupOptions(); // Show the signup options again
             speak("You are back to the sign up options. Say 'one' for manual, or 'two' for voice.");
         });
 
         chatBackBtn.addEventListener('click', () => {
+            window.speechSynthesis.cancel(); // Stop any ongoing speech
             displayInitialWelcome(); // This will also speak the welcome message
             // speak("You are back to the main welcome screen."); // Avoid double speaking if displayInitialWelcome already speaks
         });
@@ -1443,6 +1447,7 @@
 
         // --- EVENT LISTENERS for Voice Extractor ---
         recordToggleButton.addEventListener('click', () => {
+            window.speechSynthesis.cancel(); // Stop any ongoing speech
             if (!recognition) {
                 alert("Speech Recognition is not supported in your browser.");
                 speak("Speech Recognition is not supported in your browser.");
@@ -1477,6 +1482,7 @@
 
 
         clearButton.addEventListener('click', () => {
+            window.speechSynthesis.cancel(); // Stop any ongoing speech
             infoForm.reset();
             transcriptionEl.innerHTML = '';
             if (isRecording) {
@@ -1489,6 +1495,7 @@
 
         // Close voice extractor modal (only closes, doesn't confirm)
         closeVoiceExtractorModalBtn.addEventListener('click', () => {
+            window.speechSynthesis.cancel(); // Stop any ongoing speech
             voiceExtractorModal.classList.remove('active');
             if (isRecording) { // Stop recording if still active when closing modal
                 recognition.stop();
@@ -1519,6 +1526,7 @@ function validateAddressFields(addressValue) {
 
 // --- Enhanced Save and Confirm button logic ---
 saveAndConfirmBtn.addEventListener('click', () => {
+    window.speechSynthesis.cancel(); // Stop any ongoing speech
     let missingFields = [];
 
     if (!nameEl.value.trim()) missingFields.push("Name");
@@ -1705,6 +1713,7 @@ saveAndConfirmBtn.addEventListener('click', () => {
             const tncText = `Terms and Conditions:
 1. You agree to provide accurate and truthful information.
 2. By signing up, you agree to comply with all applicable laws and Mukuru's policies.
+
 Do you accept these terms and conditions? Please say 'Yes' to accept or 'No' to cancel.`;
             addMessage(tncText, 'received');
             speak(tncText);
